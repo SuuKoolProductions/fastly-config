@@ -1,42 +1,125 @@
-# Fastly / Backblaze B2 Demo
+# Shobbl / Backblaze B2 / Fastly Compute@Edge Configuration
 
-authors = ["ppatterson@backblaze.com"]
-description = "Demo of Fastly Compute@Edge with Backblaze B2"
+authors = ["nyxx@shobbl.com"]
+description = "Shobbl Content Distribution - Fastly Compute@Edge with Backblaze B2 Multi-Region"
 language = "rust"
 manifest_version = 2
-name = "fastly-compute-b2-demo"
+name = "shobbl-b2-multiregion"
 service_id = ""
 
-# Edit the backends below to match your B2 buckets and endpoints
+# Fastly backends for Shobbl B2 buckets
+# Configuration: EU (eu-central-003) and US (us-west-004) bucket pairs
 
 # Local server config wants URLs
 [local_server]
   [local_server.backends]
+    # EU Origins
     [local_server.backends.eu_origin]
-      url = "https://YOUR-EU-BUCKET.YOUR-EU-ENDPOINT"
+      url = "https://images-shobl-cache.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_games_origin]
+      url = "https://games-shobl.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_music_origin]
+      url = "https://music-shobl.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_comics_origin]
+      url = "https://comics-shobl.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_videos_origin]
+      url = "https://videos-shobl.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_art_origin]
+      url = "https://art-shobl.s3.eu-central-003.backblazeb2.com"
+    [local_server.backends.eu_public_images_origin]
+      url = "https://images-public-seo.s3.eu-central-003.backblazeb2.com"
+    
+    # US Origins
     [local_server.backends.us_origin]
-      url = "https://YOUR-US-BUCKET.YOUR-US-ENDPOINT"
+      url = "https://images-shobl-cache-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_games_origin]
+      url = "https://games-shobl-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_music_origin]
+      url = "https://music-shobl-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_comics_origin]
+      url = "https://comics-shobl-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_videos_origin]
+      url = "https://videos-shobl-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_art_origin]
+      url = "https://art-shobl-us.s3.us-west-004.backblazeb2.com"
+    [local_server.backends.us_public_images_origin]
+      url = "https://images-public-seo-us.s3.us-west-004.backblazeb2.com"
 
 # Deploy on Fastly wants domains and ports
 [setup]
   [setup.backends]
+    # EU Origins (eu-central-003)
     [setup.backends.eu_origin]
-      description = "B2 Domain for EU origin"
-      address = "YOUR-EU-BUCKET.YOUR-EU-ENDPOINT"
+      description = "Shobbl EU Images Cache Bucket"
+      address = "images-shobl-cache.s3.eu-central-003.backblazeb2.com"
       port = 443
+    [setup.backends.eu_games_origin]
+      description = "Shobbl EU Games Bucket"
+      address = "games-shobl.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    [setup.backends.eu_music_origin]
+      description = "Shobbl EU Music Bucket"
+      address = "music-shobl.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    [setup.backends.eu_comics_origin]
+      description = "Shobbl EU Comics Bucket"
+      address = "comics-shobl.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    [setup.backends.eu_videos_origin]
+      description = "Shobbl EU Videos Bucket"
+      address = "videos-shobl.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    [setup.backends.eu_art_origin]
+      description = "Shobbl EU Art Bucket"
+      address = "art-shobl.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    [setup.backends.eu_public_images_origin]
+      description = "Shobbl EU Public SEO Images Bucket"
+      address = "images-public-seo.s3.eu-central-003.backblazeb2.com"
+      port = 443
+    
+    # US Origins (us-west-004)
     [setup.backends.us_origin]
-      description = "B2 Domain for US origin"
-      address = "YOUR-US-BUCKET.YOUR-US-ENDPOINT"
+      description = "Shobbl US Images Cache Bucket"
+      address = "images-shobl-cache-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_games_origin]
+      description = "Shobbl US Games Bucket"
+      address = "games-shobl-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_music_origin]
+      description = "Shobbl US Music Bucket"
+      address = "music-shobl-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_comics_origin]
+      description = "Shobbl US Comics Bucket"
+      address = "comics-shobl-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_videos_origin]
+      description = "Shobbl US Videos Bucket"
+      address = "videos-shobl-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_art_origin]
+      description = "Shobbl US Art Bucket"
+      address = "art-shobl-us.s3.us-west-004.backblazeb2.com"
+      port = 443
+    [setup.backends.us_public_images_origin]
+      description = "Shobbl US Public SEO Images Bucket"
+      address = "images-public-seo-us.s3.us-west-004.backblazeb2.com"
       port = 443
 
   [setup.dictionaries]
     [setup.dictionaries.bucket_auth]
+      description = "B2 Authentication credentials for private buckets"
       [setup.dictionaries.bucket_auth.items]
+        # EU Credentials
         [setup.dictionaries.bucket_auth.items.eu_origin_access_key_id]
-          description = "B2 Application Key ID for EU Origin"
+          description = "B2 Application Key ID for EU Buckets"
         [setup.dictionaries.bucket_auth.items.eu_origin_secret_access_key]
-          description = "B2 Application Key for EU Origin"
+          description = "B2 Application Key for EU Buckets"
+        
+        # US Credentials
         [setup.dictionaries.bucket_auth.items.us_origin_access_key_id]
-          description = "B2 Application Key ID for US Origin"
+          description = "B2 Application Key ID for US Buckets"
         [setup.dictionaries.bucket_auth.items.us_origin_secret_access_key]
-          description = "B2 Application Key for US Origin"
+          description = "B2 Application Key for US Buckets"
