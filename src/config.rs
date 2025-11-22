@@ -17,17 +17,123 @@ pub struct Origin {
 
 /// Details of the origins. You must edit the bucket_names and bucket_hosts. Do not change
 /// the backend_name.
-pub(crate) const EU_ORIGIN: Origin = Origin {
+
+// Images Cache Buckets
+pub(crate) const EU_IMAGES_ORIGIN: Origin = Origin {
     backend_name: "eu_origin",
-    bucket_name: "YOUR-EU-BUCKET",
-    bucket_host: "YOUR-EU-ENDPOINT",
+    bucket_name: "images-shobl-cache",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
 };
 
-pub(crate) const US_ORIGIN: Origin = Origin {
+pub(crate) const US_IMAGES_ORIGIN: Origin = Origin {
     backend_name: "us_origin",
-    bucket_name: "YOUR-US-BUCKET",
-    bucket_host: "YOUR-US-ENDPOINT",
+    bucket_name: "images-shobl-cache-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
 };
+
+// Games Buckets
+pub(crate) const EU_GAMES_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "games-shobl",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_GAMES_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "games-shobl-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Music Buckets
+pub(crate) const EU_MUSIC_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "music-shobl",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_MUSIC_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "music-shobl-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Comics Buckets
+pub(crate) const EU_COMICS_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "comics-shobl",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_COMICS_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "comics-shobl-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Videos Buckets
+pub(crate) const EU_VIDEOS_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "videos-shobl",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_VIDEOS_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "videos-shobl-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Art Buckets
+pub(crate) const EU_ART_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "art-shobl",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_ART_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "art-shobl-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Public SEO Images Buckets
+pub(crate) const EU_PUBLIC_IMAGES_ORIGIN: Origin = Origin {
+    backend_name: "eu_origin",
+    bucket_name: "images-public-seo",
+    bucket_host: "s3.eu-central-003.backblazeb2.com",
+};
+
+pub(crate) const US_PUBLIC_IMAGES_ORIGIN: Origin = Origin {
+    backend_name: "us_origin",
+    bucket_name: "images-public-seo-us",
+    bucket_host: "s3.us-west-004.backblazeb2.com",
+};
+
+// Default origins (using images cache for backward compatibility)
+pub(crate) const EU_ORIGIN: Origin = EU_IMAGES_ORIGIN;
+pub(crate) const US_ORIGIN: Origin = US_IMAGES_ORIGIN;
+
+/// Content-type based origin routing
+/// Routes requests based on the file path prefix (e.g., /games/, /art/, /music/)
+pub fn get_origin_for_content_path(path: &str, region: &str) -> Origin {
+    let origin = if path.starts_with("games/") {
+        if region == "eu" { EU_GAMES_ORIGIN } else { US_GAMES_ORIGIN }
+    } else if path.starts_with("art/") {
+        if region == "eu" { EU_ART_ORIGIN } else { US_ART_ORIGIN }
+    } else if path.starts_with("music/") || path.starts_with("audio/") {
+        if region == "eu" { EU_MUSIC_ORIGIN } else { US_MUSIC_ORIGIN }
+    } else if path.starts_with("videos/") || path.starts_with("video/") {
+        if region == "eu" { EU_VIDEOS_ORIGIN } else { US_VIDEOS_ORIGIN }
+    } else if path.starts_with("comics/") {
+        if region == "eu" { EU_COMICS_ORIGIN } else { US_COMICS_ORIGIN }
+    } else if path.starts_with("images-public/") {
+        if region == "eu" { EU_PUBLIC_IMAGES_ORIGIN } else { US_PUBLIC_IMAGES_ORIGIN }
+    } else {
+        // Default to images cache for unknown types
+        if region == "eu" { EU_IMAGES_ORIGIN } else { US_IMAGES_ORIGIN }
+    };
+    origin
+}
 
 lazy_static! {
     /// Regex for extracting region from endpoint
